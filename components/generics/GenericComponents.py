@@ -98,33 +98,3 @@ def adding_columns(dataframe, invoice, arrival):
         }
 
 
-def save_dataframe_to_excel(dataframe):
-    """
-    Open a save dialog window and allow the user
-    to choose where to save the Excel file.
-    """
-
-    if dataframe.empty:
-        print("DataFrame is empty. Nothing to save.")
-        return None
-
-    # Hide main tkinter window
-    root = tk.Tk()
-    root.withdraw()
-
-    # Open save dialog
-    file_path = filedialog.asksaveasfilename(
-        defaultextension=".xlsx",
-        filetypes=[("Excel files", "*.xlsx")],
-        title="Save Excel File"
-    )
-
-    if not file_path:
-        print("Save cancelled.")
-        return None
-
-    # Save file
-    dataframe.to_excel(file_path, index=False)
-
-    print(f"File saved successfully at: {file_path}")
-    return file_path
