@@ -1,5 +1,4 @@
-from tkinter import filedialog
-import tkinter as tk
+
 
 def to_treatDecimal(valor):
     if not valor:
