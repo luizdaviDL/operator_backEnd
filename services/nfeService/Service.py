@@ -2,7 +2,7 @@ from components.nfeComponents.Components import decodePDFToNfe,group_by_client
 from components.generics.GenericComponents import adding_columns
 
 
-class Service:
+class NfeService:
     
     def treating_nfe_piso(self, inputPdfs, invoiceInput, arrivalInput):
 

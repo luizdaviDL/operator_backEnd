@@ -1,10 +1,10 @@
 from fastapi import APIRouter
-from services.nfeService.Service import Service
+from services.nfeService.Service import NfeService
 from services.guideService.Guide import Service
 
 router = APIRouter()
 
-nfe_service = Service()
+nfe_service = NfeService()
 guide_service = Service()
 
 @router.post("/set_nfd")
