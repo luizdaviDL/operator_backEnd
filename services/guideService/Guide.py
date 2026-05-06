@@ -1,4 +1,4 @@
-from components.guideComponents import fitzDecode
+from components.guideComponents.guideComponents import fitzDecode
 
 
 class Service:
@@ -14,8 +14,8 @@ class Service:
                         "filename": i.get('name'),  # ← Nome do arquivo
                         "data": i.get('data')
                     }
-                else:
-                    return {"finded": False}
+                                    
+            return {"finded": False}
 
         except Exception as e:
             return {"erro": str(e)}
