@@ -21,7 +21,7 @@ async def treating_nfe(payload: dict):
     except Exception as e:
         return {
             "ok": False,
-            "error": str(e)
+            "error": f'Erro de servidor. {str(e)}'
         }
         
         
@@ -37,5 +37,5 @@ async def find_guide(payload: dict):
     except Exception as e:
         return {
             "ok": False,
-            "error": str(e)
+            "error": f'Erro de servidor. {str(e)}'
         }        
