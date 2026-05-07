@@ -17,23 +17,21 @@ def adding_columns(dataframe, invoice, arrival):
 
     try:
         # 🔹 validação inicial
-        if dataframe is None or dataframe.empty:
-            return {
-                "ok": False,
-                "error": "DataFrame vazio ou inválido",
-                "data": None
-            }
+        if dataframe.empty:
+            return dataframe
 
         # -------------------------
-        # 🔹 adicionar colunas fixas
+        # Fixed Columns
         # -------------------------
         dataframe["FATURAMENTO"] = invoice
         dataframe["CHEGADA"] = arrival
         dataframe["ENTREGA"] = ""
 
+        # After CIDADE
         dataframe["Caixas"] = ""
         dataframe["Peso Liq"] = ""
 
+        # After Preço Bruto
         dataframe["Preço Liq"] = ""
         dataframe["STATUS"] = "PARADO NO CD"
         dataframe["OBSERVAÇÕES"] = f"CARRETA DO DIA {arrival}"
@@ -41,27 +39,21 @@ def adding_columns(dataframe, invoice, arrival):
         cols = list(dataframe.columns)
 
         # -------------------------
-        # 🔹 inserir após CIDADE
+        # Insert after CIDADE
         # -------------------------
         if "CIDADE" in cols:
             idx_cidade = cols.index("CIDADE") + 1
-
             for col in ["Caixas", "Peso Liq"]:
-                if col in cols:
-                    cols.remove(col)
-
+                cols.remove(col)
             cols[idx_cidade:idx_cidade] = ["Caixas", "Peso Liq"]
 
         # -------------------------
-        # 🔹 inserir após Preço Bruto
+        # Insert after Preço Bruto
         # -------------------------
         if "Preço Bruto" in cols:
             idx_preco = cols.index("Preço Bruto") + 1
-
             for col in ["Preço Liq", "STATUS", "OBSERVAÇÕES"]:
-                if col in cols:
-                    cols.remove(col)
-
+                cols.remove(col)
             cols[idx_preco:idx_preco] = [
                 "Preço Liq",
                 "STATUS",
@@ -69,13 +61,12 @@ def adding_columns(dataframe, invoice, arrival):
             ]
 
         # -------------------------
-        # 🔹 mover colunas prioritárias
+        # Move priority columns to beginning
         # -------------------------
         priority = ["FATURAMENTO", "CHEGADA", "ENTREGA"]
 
         for col in priority:
-            if col in cols:
-                cols.remove(col)
+            cols.remove(col)
 
         final_order = priority + cols
 
