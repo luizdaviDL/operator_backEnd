@@ -220,3 +220,126 @@ def normalize_client_name(name):
 
     # Use first relevant word as grouping key
     return filtered_words[0]
+
+
+
+def fitzDecode(value):
+    try:
+       
+        if not value:
+            raise ValueError("O campo 'data' está vazio.")
+
+        # 🔥 decodifica base64
+        try:
+            pdf_data = base64.b64decode(value)
+        except Exception:
+            raise ValueError("Erro ao decodificar o base64 do PDF.")
+
+        # 🔥 abre PDF
+        try:
+            doc = fitz.open(stream=pdf_data, filetype="pdf")
+        except Exception:
+            raise ValueError("Arquivo inválido ou corrompido.")
+
+        # 🔥 valida páginas
+        if doc.page_count == 0:
+            raise ValueError("O PDF não possui páginas.")
+
+        # 🔥 extrai texto
+        text = []
+
+        for index, page in enumerate(doc):
+            try:
+                text.append(page.get_text())
+            except Exception as e:
+                print(f"Erro ao ler página {index}: {e}")
+
+        final_text = "\n".join(text).strip()
+
+        if not final_text:
+            raise ValueError("Nenhum texto encontrado no PDF.")
+
+        return {
+            "ok": True,
+            "text": final_text
+        }
+
+    except KeyError as e:
+        return {
+            "ok": False,
+            "type": "KEY_ERROR",
+            "erro": str(e)
+        }
+
+    except ValueError as e:
+        return {
+            "ok": False,
+            "type": "VALUE_ERROR",
+            "erro": str(e)
+        }
+
+    except TypeError as e:
+        return {
+            "ok": False,
+            "type": "TYPE_ERROR",
+            "erro": str(e)
+        }
+
+    except Exception as e:
+        return {
+            "ok": False,
+            "type": "UNKNOWN_ERROR",
+            "erro": str(e)
+        }
+
+
+def decodePDF(value, input, filename):
+
+    try:
+
+        # 🔥 valida parâmetros
+        if not input:
+            raise ValueError("O parâmetro input está vazio.")
+
+        if not filename:
+            raise ValueError("O filename não foi informado.")
+
+        # 🔥 leitura PDF
+        decoded = fitzDecode(value)
+
+        # 🔥 erro na leitura
+        if not decoded.get("ok"):
+            return decoded
+
+        text = decoded["text"]
+
+        # 🔥 busca conteúdo
+        if input in text:
+
+            return {
+                "ok": True,
+                "finded": True,
+                "filename": filename,
+                "data": value
+            }
+
+        return {
+            "ok": True,
+            "finded": False
+        }
+
+    except ValueError as e:
+
+        return {
+            "ok": False,
+            "type": "VALUE_ERROR",
+            "erro": str(e)
+        }
+
+    except Exception as e:
+
+        return {
+            "ok": False,
+            "type": "UNKNOWN_ERROR",
+            "erro": str(e)
+        }

@@ -21,7 +21,7 @@ async def treating_nfe(payload: dict):
     except Exception as e:
         return {
             "ok": False,
-            "error": f'Erro de servidor. {str(e)}'
+            "status": f'Erro de servidor. {str(e)}'
         }
         
         
@@ -37,5 +37,19 @@ async def find_guide(payload: dict):
     except Exception as e:
         return {
             "ok": False,
-            "error": f'Erro de servidor. {str(e)}'
+            "status": f'Erro de servidor. {str(e)}'
         }        
+        
+@router.post("/buscar_nota")
+def shearchByNote(payload: dict):
+    try:
+       service = nfe_service.shearch_by_note(payload['files'],payload['inputBuscaNfe'])
+       return service
+
+    except Exception as e:
+        return {
+            "ok": False,
+            "status": f'Erro de servidor. {str(e)}'
+        }     
+        
+           
